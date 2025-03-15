@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 
 class RegisterScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       appBar: AppBar(title: Text('Register')),
       body: Padding(
@@ -25,8 +27,13 @@ class RegisterScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                authService.register(_emailController.text, _passwordController.text);
+              onPressed: () async {
+                await authProvider.register(
+                  _emailController.text,
+                  _passwordController.text,
+                );
+                // Navigate to home screen after registration
+                Navigator.pushReplacementNamed(context, '/');
               },
               child: Text('Register'),
             ),
